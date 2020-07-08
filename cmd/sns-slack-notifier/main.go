@@ -35,7 +35,7 @@ func main() {
 
 // HandleRequest contains the code which will be executed.
 func HandleRequest(ctx context.Context, snsEvent events.SNSEvent) error {
-	slackApi := slack.New(*cliSlackToken)
+	slackAPI := slack.New(*cliSlackToken)
 	for _, record := range snsEvent.Records {
 		snsRecord := record.SNS
 		attachment := slack.Attachment{
@@ -43,7 +43,7 @@ func HandleRequest(ctx context.Context, snsEvent events.SNSEvent) error {
 			Text: snsRecord.Message,
 			Footer: fmt.Sprintf(":skpr: %s Source: %s MessageID: %s Topic: %s", snsRecord.Timestamp.Format(time.UnixDate), record.EventSource, snsRecord.MessageID, snsRecord.TopicArn),
 		}
-		_, _, err := slackApi.PostMessage(*cliSlackChannel, slack.MsgOptionText(snsRecord.Subject, false), slack.MsgOptionAttachments(attachment))
+		_, _, err := slackAPI.PostMessage(*cliSlackChannel, slack.MsgOptionText(snsRecord.Subject, false), slack.MsgOptionAttachments(attachment))
 		if err != nil {
 			return err
 		}
